@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header text-center">
+                <i class="fas fa-video me-2"></i>Live Attendance Monitor
+            </div>
+            <div class="card-body">
+                <p class="text-muted text-center mb-3">Faces are detected and attendance is marked automatically. Keep the camera pointed toward the classroom.</p>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="position-relative rounded" style="overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);">
+                            <video id="video" width="640" height="480" autoplay muted
+                                style="width: 100%; max-width: 100%; border-radius: 8px; display: block;"></video>
+                            <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+                            <canvas id="overlay" width="640" height="480"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; border-radius: 8px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-10">
+                        <div id="status" class="alert alert-info text-center mb-0">
+                            <i class="fas fa-spinner fa-spin me-2"></i>Starting camera...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-10">
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            <a href="{{ url_for('main.attendance') }}" class="btn btn-primary">
+                                <i class="fas fa-list-check me-2"></i>View Attendance Log
+                            </a>
+                            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-home me-2"></i>Back to Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Status</h6>
+                <h4 class="fw-bold text-success"><i class="fas fa-circle text-success me-2"></i>Active</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">FPS</h6>
+                <h4 class="fw-bold text-primary"><i class="fas fa-tachometer-alt me-2"></i>5 FPS</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Resolution</h6>
+                <h4 class="fw-bold text-info"><i class="fas fa-video me-2"></i>640x480</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const overlay = document.getElementById('overlay');
+    const status = document.getElementById('status');
+    const ctx = canvas.getContext('2d');
+    const overlayCtx = overlay.getContext('2d');
+
+    // Access webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            status.innerHTML = '<i class="fas fa-check-circle me-2 text-success"></i>Camera active. Processing...';
+            status.className = "alert alert-success text-center mb-0";
+            startProcessing();
+        })
+        .catch(err => {
+            console.error("Error accessing webcam:", err);
+            status.innerHTML = '<i class="fas fa-exclamation-circle me-2 text-danger"></i>Error accessing webcam. Please check permissions.';
+            status.className = "alert alert-danger text-center mb-0";
+        });
+
+    function startProcessing() {
+        setInterval(() => {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                // Draw video frame to canvas
+                ctx.drawImage(video, 0, 0, 640, 480);
+                
+                // Convert to blob/base64
+                const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+                
+                // Send to server
+                fetch('{{ url_for("main.process_frame") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: dataURL })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Clear overlay
+                    overlayCtx.clearRect(0, 0, 640, 480);
+                    
+                    if (data.faces) {
+                        data.faces.forEach(face => {
+                            const { x, y, w, h, name, color } = face;
+                            
+                            // Draw box with gradient effect
+                            overlayCtx.strokeStyle = color;
+                            overlayCtx.lineWidth = 3;
+                            overlayCtx.shadowColor = color;
+                            overlayCtx.shadowBlur = 10;
+                            overlayCtx.strokeRect(x, y, w, h);
+                            overlayCtx.shadowBlur = 0;
+                            
+                            // Draw background for text with rounded corners
+                            const textHeight = 30;
+                            const textY = y + h;
+                            
+                            overlayCtx.fillStyle = color;
+                            overlayCtx.fillRect(x, textY, w, textHeight);
+                            
+                            // Draw text
+                            overlayCtx.fillStyle = 'white';
+                            overlayCtx.font = 'bold 14px Arial';
+                            overlayCtx.textAlign = 'left';
+                            overlayCtx.fillText(name, x + 8, textY + 20);
+                        });
+                    }
+                })
+                .catch(err => console.error("Error processing frame:", err));
+            }
+        }, 200); // 5 FPS
+    }
+</script>
+{% endblock %}

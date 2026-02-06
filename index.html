@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3" style="box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+    <div class="container-fluid py-5">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-face-smile-wink text-primary"></i> Welcome to AI Attendance
+                </h1>
+                <p class="fs-5 text-muted mb-4">A smart system to automatically mark attendance using advanced Facial Recognition technology. Real-time detection, instant logging, and automated tracking.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="btn btn-primary btn-lg" href="{{ url_for('main.monitor') }}" role="button">
+                        <i class="fas fa-play-circle me-2"></i>Start Live Monitor
+                    </a>
+                    <a class="btn btn-secondary btn-lg" href="{{ url_for('main.register') }}" role="button">
+                        <i class="fas fa-user-plus me-2"></i>Register Student
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="fas fa-camera" style="font-size: 120px; color: #6366f1; opacity: 0.1;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mb-5">
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body py-5">
+                <i class="fas fa-face-smile" style="font-size: 2.5rem; color: #6366f1; margin-bottom: 1rem;"></i>
+                <h5 class="card-title fw-bold mb-3">Smart Recognition</h5>
+                <p class="card-text text-muted">Advanced facial recognition technology for accurate student identification in real-time.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body py-5">
+                <i class="fas fa-bolt" style="font-size: 2.5rem; color: #8b5cf6; margin-bottom: 1rem;"></i>
+                <h5 class="card-title fw-bold mb-3">Instant Logging</h5>
+                <p class="card-text text-muted">Automatic attendance logging with timestamp for complete audit trail and accountability.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body py-5">
+                <i class="fas fa-chart-bar" style="font-size: 2.5rem; color: #10b981; margin-bottom: 1rem;"></i>
+                <h5 class="card-title fw-bold mb-3">Easy Reports</h5>
+                <p class="card-text text-muted">Access comprehensive attendance logs and generate detailed reports at a glance.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="fas fa-check-circle text-success me-2"></i>Key Features</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Real-time Detection:</strong> Live facial recognition</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Automated Logging:</strong> No manual entry needed</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Student Database:</strong> Manage student records easily</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Attendance History:</strong> View complete logs</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="fas fa-lightbulb text-warning me-2"></i>How It Works</h5>
+                <ol class="text-muted">
+                    <li class="mb-2">Register students with their facial data</li>
+                    <li class="mb-2">Activate the live monitoring system</li>
+                    <li class="mb-2">System detects faces in real-time</li>
+                    <li class="mb-2">Attendance automatically logged to database</li>
+                    <li class="mb-2">View and export attendance records</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

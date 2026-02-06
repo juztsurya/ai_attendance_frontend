@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mb-5">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-plus me-2"></i>Register New Student
+            </div>
+            <div class="card-body p-5">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-user me-2 text-primary"></i>Full Name
+                        </label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
+                        <div class="form-text">The student's complete name as it appears in records.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="student_id" class="form-label">
+                            <i class="fas fa-id-card me-2 text-primary"></i>Student ID
+                        </label>
+                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="E.g., STU001" required>
+                        <div class="form-text">Unique identifier for the student (roll number or ID).</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="file" class="form-label">
+                            <i class="fas fa-camera me-2 text-primary"></i>Profile Photo
+                        </label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
+                            <span class="input-group-text"><i class="fas fa-image"></i></span>
+                        </div>
+                        <div class="form-text">Upload a clear frontal face photo (JPG, PNG). Good lighting recommended.</div>
+                    </div>
+
+                    <div class="alert alert-info d-flex align-items-start" role="alert">
+                        <i class="fas fa-lightbulb me-2 mt-1 flex-shrink-0"></i>
+                        <div>
+                            <strong>Pro Tips:</strong>
+                            <ul class="mb-0 mt-1">
+                                <li>Ensure face is clearly visible and centered</li>
+                                <li>Use good lighting to avoid shadows</li>
+                                <li>Keep the camera distance appropriate</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success flex-grow-1">
+                            <i class="fas fa-check me-2"></i>Register Student
+                        </button>
+                        <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Registration Guidelines</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-success mb-2"><i class="fas fa-check me-2"></i>Do's:</h6>
+                        <ul class="text-muted small">
+                            <li>Use a recent, clear facial photo</li>
+                            <li>Ensure the face fills 50-70% of the image</li>
+                            <li>Use natural lighting when possible</li>
+                            <li>Keep a neutral expression</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-danger mb-2"><i class="fas fa-times me-2"></i>Don'ts:</h6>
+                        <ul class="text-muted small">
+                            <li>Avoid group photos or multiple faces</li>
+                            <li>Don't use photos with excessive makeup or filters</li>
+                            <li>Avoid extreme angles or tilted head</li>
+                            <li>Don't use photos with sunglasses or hats</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
