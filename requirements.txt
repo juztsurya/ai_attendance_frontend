@@ -1,0 +1,5 @@
+Flask==2.3.0
+Flask-SQLAlchemy==3.0.3
+opencv-python==4.7.0.72
+numpy==1.23.5
+Werkzeug==2.3.0
